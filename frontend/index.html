@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modern Parking System</title>
+  <link rel="stylesheet" href="style.css?v=20260925-2">
+</head>
+<body>
+  <div class="app-shell">
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-title">Modern Parking System</div>
+        <div class="topbar-meta"><span>◷</span><span id="currentDate">Monday, 12 May 2025</span><strong id="currentTime">14:32:18</strong><span class="user-avatar">●</span><span>Admin</span><span>⌄</span></div>
+      </header>
+
+      <main id="dashboard" class="dashboard">
+        <div class="page-heading"><div><h1>▰ &nbsp;Dashboard</h1><p>Overview of parking system status</p></div></div>
+
+        <section class="stats-grid" aria-label="Parking summary">
+          <article class="stat-card stat-blue"><span class="stat-icon">P</span><div><small>Total Slots</small><strong id="totalCount">20</strong></div></article>
+          <article class="stat-card stat-green"><span class="stat-icon">▣</span><div><small>Occupied Slots</small><strong id="occupiedCount">--</strong></div></article>
+          <article class="stat-card stat-cyan"><span class="stat-icon">⌗</span><div><small>Available Slots</small><strong id="availableCount">--</strong></div></article>
+          <article class="stat-card stat-purple"><span class="stat-icon">◷</span><div><small>Current Time</small><strong id="dashboardTime">14:32:18</strong><em id="dashboardDate">12 May 2025</em></div></article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="content-card slots-card" id="parking-slots">
+            <div class="card-title"><h2><span class="title-icon">P</span>Parking Slots</h2></div>
+            <div id="availability" class="slots" aria-live="polite"></div>
+            <div class="slot-legend"><span><i class="available-dot"></i>Available</span><span><i class="occupied-dot"></i>Occupied</span></div>
+            <p id="availabilityMessage" class="availability-message">Loading...</p>
+          </article>
+
+          <div class="form-stack">
+            <article class="content-card form-card" id="arrival">
+              <div class="card-title"><h2><span class="title-icon">▣</span>Record Vehicle Arrival</h2></div>
+              <form id="entryForm">
+                <label for="entryRegistration">Vehicle Registration Number</label>
+                <input id="entryRegistration" required autocomplete="off" placeholder="e.g. KDG 123A">
+                <label for="entrySlot">Select Parking Slot</label>
+                <select id="entrySlot"><option>Choose available slot</option></select>
+                <button class="blue-button" type="submit"><span>▣</span>Record Arrival</button>
+                <p id="entryMessage" class="feedback" aria-live="polite"></p>
+              </form>
+            </article>
+
+            <article class="content-card form-card" id="exit-panel">
+              <div class="card-title"><h2><span class="title-icon">▣</span>Process Vehicle Exit</h2></div>
+              <form id="exitForm">
+                <label for="exitRegistration">Vehicle Registration Number</label>
+                <input id="exitRegistration" required autocomplete="off" placeholder="e.g. KDG 123A">
+                <button class="green-button" type="submit"><span>↪</span>Process Exit &amp; Calculate Fee</button>
+              </form>
+              <div id="exitResult" class="exit-result" aria-live="polite"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="lower-grid">
+          <article class="content-card parked-card" id="parked-vehicles">
+            <div class="card-title card-title-row"><h2><span class="title-icon">▤</span>Parked Vehicles</h2><a href="#parked-vehicles">View All ›</a></div>
+            <table><thead><tr><th>#</th><th>Vehicle No.</th><th>Slot</th><th>Entry Time</th><th>Duration</th><th>Fee</th></tr></thead><tbody id="parkedTable"><tr><td colspan="6">Loading parked vehicles...</td></tr></tbody></table>
+          </article>
+
+          <article class="content-card fee-card" id="fee-rules">
+            <div class="card-title"><h2><span class="title-icon">$</span>Fee Rules</h2></div>
+            <table class="fee-table"><thead><tr><th>Duration</th><th>Fee</th></tr></thead><tbody><tr><td>Up to 30 minutes</td><td>KSh 0</td></tr><tr><td>Up to 2 hours</td><td>KSh 50</td></tr><tr><td>Up to 4 hours</td><td>KSh 100</td></tr><tr><td>Up to 6 hours</td><td>KSh 300</td></tr><tr><td>Over 6 hours</td><td>KSh 500</td></tr></tbody></table>
+            <div class="info-note">ⓘ &nbsp; Parking fee is calculated automatically<br><span>based on the time spent.</span></div>
+          </article>
+
+          <article class="content-card quick-card" id="reports">
+            <div class="card-title"><h2><span class="title-icon">ϟ</span>Quick Actions</h2></div>
+            <a href="#parking-slots" class="quick-button blue-button">▣ &nbsp; View Parking Slots</a><a href="#arrival" class="quick-button green-button">▣ &nbsp; Record Vehicle Arrival</a><a href="#exit-panel" class="quick-button cyan-button">↪ &nbsp; Process Vehicle Exit</a><a href="#parked-vehicles" class="quick-button purple-button">▤ &nbsp; View Parked Vehicles</a><a href="#fee-rules" class="quick-button orange-button">▤ &nbsp; View Fee Rules</a>
+          </article>
+        </section>
+      </main>
+      <footer><span>Modern Parking System &nbsp;|&nbsp; C++ Web Application (HTML Frontend)</span><span>Smart Parking &nbsp;•&nbsp; Efficient Management &nbsp;•&nbsp; Better Service</span></footer>
+    </div>
+  </div>
+  <script src="script.js?v=20260925-2"></script>
+</body>
+</html>

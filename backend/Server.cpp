@@ -1,0 +1,15 @@
+#include "httplib.h"
+#include "nlohmann/json.hpp"
+#include "ParkingSystem.h"
+#include <iostream>
+#include <algorithm>
+using json=nlohmann::json;
+static ParkingSystem parking(20);
+static std::string reg(const httplib::Request&req){try{auto b=json::parse(req.body);std::string r=b.value("registration","");std::transform(r.begin(),r.end(),r.begin(),::toupper);return r;}catch(...){return "";}}
+int main(){httplib::Server s;s.set_default_headers({{"Access-Control-Allow-Origin","*"},{"Access-Control-Allow-Headers","Content-Type"},{"Access-Control-Allow-Methods","GET, POST, OPTIONS"}});s.Options(R"(.*)",[](const httplib::Request&,httplib::Response&r){r.status=204;});
+s.Get("/api/slots",[](const httplib::Request&,httplib::Response&r){json a=json::array();auto av=parking.getAvailableSlotNumbers();for(int i=1;i<=parking.getTotalSlots();i++){bool ok=std::find(av.begin(),av.end(),i)!=av.end();a.push_back({{"number",i},{"available",ok}});}r.set_content(json{{"success",true},{"total",parking.getTotalSlots()},{"available",parking.getAvailableSlots()},{"slots",a}}.dump(),"application/json");});
+s.Get("/api/parked",[](const httplib::Request&,httplib::Response&r){std::vector<VehicleRecord>records;if(!parking.getActiveVehicles(records)){r.status=500;r.set_content(json{{"success",false},{"message","Could not load parked vehicles."}}.dump(),"application/json");return;}json vehicles=json::array();for(const auto&record:records)vehicles.push_back({{"registration",record.registration},{"slot",record.slot},{"entryTime",record.entryTime},{"durationMinutes",record.durationMinutes},{"amount",record.amount}});r.set_content(json{{"success",true},{"vehicles",vehicles}}.dump(),"application/json");});
+s.Post("/api/entry",[](const httplib::Request&q,httplib::Response&r){int slot;std::string m,x=reg(q);if(!parking.registerVehicle(x,slot,m)){r.status=400;r.set_content(json{{"success",false},{"message",m}}.dump(),"application/json");return;}r.set_content(json{{"success",true},{"registration",x},{"slot",slot},{"message",m}}.dump(),"application/json");});
+s.Post("/api/exit",[](const httplib::Request&q,httplib::Response&r){auto x=parking.processExit(reg(q));if(!x.success){r.status=400;r.set_content(json{{"success",false},{"message",x.message}}.dump(),"application/json");return;}r.set_content(json{{"success",true},{"slot",x.slot},{"durationMinutes",x.durationMinutes},{"amount",x.amount},{"message",x.message}}.dump(),"application/json");});
+s.Post("/api/payment",[](const httplib::Request&q,httplib::Response&r){double a;int slot;std::string m;if(!parking.processPayment(reg(q),a,slot,m)){r.status=400;r.set_content(json{{"success",false},{"message",m}}.dump(),"application/json");return;}r.set_content(json{{"success",true},{"amount",a},{"slot",slot},{"barrierOpen",true},{"message",m}}.dump(),"application/json");});
+std::cout<<"SmartPark Kenya server running at http://localhost:8080\n";s.listen("0.0.0.0",8080);}
