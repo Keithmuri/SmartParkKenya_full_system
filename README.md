@@ -1,8 +1,8 @@
-# SmartPark Kenya - Full System
+# EasyPark - Full System
 
 SmartPark Kenya is a small parking operations dashboard backed by a C++ HTTP API and SQLite. The frontend is a static HTML/CSS/JavaScript control room with live space availability, vehicle entry, exit calculation, and payment workflows.
 
-## What it does when used
+## What it does
 
 - Shows live availability for all parking spaces
 - Assigns the next available space when a vehicle enters
